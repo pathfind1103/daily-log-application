@@ -2,27 +2,38 @@ package com.example.dailylog.post;
 
 import com.example.dailylog.board.Board;
 import com.example.dailylog.tag.Tag;
+import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.Set;
 
+@Entity
+//@Table(name = "post_table")
 public class Post {
+    @Id
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String content;
     private Date createdAt;
     private Date updatedAt;
+    @OneToOne
+    @JoinColumn(name = "board_id")
     private Board board;
-    private Set<Tag> tags;
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
-    public Post(Long id, String title, String content, Date createdAt, Date updatedAt, Board board, Set<Tag> tags) {
+    public Post() {
+    }
+
+    public Post(Long id, String title, String content, Date createdAt, Date updatedAt, Board board, Tag tag) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.board = board;
-        this.tags = tags;
+        this.tag = tag;
     }
 
     public Long getId() {
@@ -73,11 +84,11 @@ public class Post {
         this.board = board;
     }
 
-    public Set<Tag> getTags() {
-        return tags;
+    public Tag getTag() {
+        return tag;
     }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 }
