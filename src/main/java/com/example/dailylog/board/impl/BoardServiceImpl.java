@@ -11,20 +11,18 @@ import java.util.Optional;
 @Service
 public class BoardServiceImpl implements BoardService {
     BoardRepositry boardRepositry;
-    private Long nextId = 1L;
 
     public BoardServiceImpl(BoardRepositry boardRepositry) {
         this.boardRepositry = boardRepositry;
     }
 
     @Override
-    public List<Board> findAll() {
+    public List<Board> getAllBoards() {
         return (List<Board>) boardRepositry.findAll();
     }
 
     @Override
     public void createBoard(Board board) {
-        board.setId(nextId++);
         boardRepositry.save(board);
     }
 
@@ -35,10 +33,10 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public boolean deleteBoardById(Long id) {
-        try {
+        if (boardRepositry.existsById(id)) {
             boardRepositry.deleteById(id);
             return true;
-        } catch (Exception e) {
+        } else {
             return false;
         }
     }
@@ -47,11 +45,11 @@ public class BoardServiceImpl implements BoardService {
     public boolean updateBoard(Long id, Board updatedBoard) {
         Optional<Board> boardOptional = boardRepositry.findById(id);
         if (boardOptional.isPresent()) {
-            Board board = boardOptional.get();
-            board.setId(updatedBoard.getId());
-            board.setName(updatedBoard.getName());
-            board.setDescription(updatedBoard.getDescription());
-            boardRepositry.save(board);
+            Board boardToUpdate = boardOptional.get();
+            boardToUpdate.setName(updatedBoard.getName());
+            boardToUpdate.setDescription(updatedBoard.getDescription());
+            boardToUpdate.setPosts(boardToUpdate.getPosts());
+            boardRepositry.save(boardToUpdate);
             return true;
         }
         return false;

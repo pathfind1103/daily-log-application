@@ -1,9 +1,10 @@
 package com.example.dailylog.board;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.dailylog.post.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Board {
@@ -13,13 +14,18 @@ public class Board {
     private String name;
     private String description;
 
+    @JsonIgnore
+    @OneToMany
+    private List<Post> posts;
+
     public Board() {
     }
 
-    public Board(Long id, String name, String description) {
+    public Board(Long id, String name, String description, List<Post> posts) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.posts = posts;
     }
 
     public Long getId() {
@@ -44,5 +50,13 @@ public class Board {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 }

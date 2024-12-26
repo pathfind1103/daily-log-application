@@ -16,24 +16,20 @@ public class Post {
     private String content;
     private Date createdAt;
     private Date updatedAt;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
-    @ManyToOne
-    @JoinColumn(name = "tag_id")
-    private Tag tag;
 
     public Post() {
     }
 
-    public Post(Long id, String title, String content, Date createdAt, Date updatedAt, Board board, Tag tag) {
+    public Post(Long id, String title, String content, Date createdAt, Date updatedAt, Board board) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.board = board;
-        this.tag = tag;
     }
 
     public Long getId() {
@@ -82,13 +78,5 @@ public class Post {
 
     public void setBoard(Board board) {
         this.board = board;
-    }
-
-    public Tag getTag() {
-        return tag;
-    }
-
-    public void setTag(Tag tag) {
-        this.tag = tag;
     }
 }

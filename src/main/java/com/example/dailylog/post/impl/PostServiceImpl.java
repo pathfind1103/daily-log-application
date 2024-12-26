@@ -11,7 +11,6 @@ import java.util.Optional;
 @Service
 public class PostServiceImpl implements PostService {
     PostRepositry postRepositry;
-    private Long nextId = 1L;
 
     public PostServiceImpl(PostRepositry postRepositry) {
         this.postRepositry = postRepositry;
@@ -24,7 +23,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void createPost(Post post) {
-        post.setId(nextId++);
         postRepositry.save(post);
     }
 
@@ -35,13 +33,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public boolean deletePostById(Long id) {
-        try {
+        if (postRepositry.existsById(id)) {
             postRepositry.deleteById(id);
             return true;
-        } catch (Exception e) {
+        } else {
             return false;
         }
-
     }
 
     @Override
@@ -53,8 +50,7 @@ public class PostServiceImpl implements PostService {
                 post.setContent(updatedPost.getContent());
                 post.setCreatedAt(updatedPost.getCreatedAt());
                 post.setUpdatedAt(updatedPost.getUpdatedAt());
-                post.setBoard(updatedPost.getBoard());
-                post.setTag(updatedPost.getTag());
+//                post.setBoard(updatedPost.getBoard());
                 postRepositry.save(post);
                 return true;
             }
