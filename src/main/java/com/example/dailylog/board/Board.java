@@ -14,8 +14,7 @@ public class Board {
     private String name;
     private String description;
 
-    @JsonIgnore
-    @OneToMany
+    @OneToMany(mappedBy = "board")
     private List<Post> posts;
 
     public Board() {

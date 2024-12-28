@@ -22,7 +22,7 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Board> getBoardByID (@PathVariable Long id) {
-        Board board = boardService.getBoardByID(id);
+        Board board = boardService.getBoardById(id);
         if (board != null) {
             return new ResponseEntity<>(board, HttpStatus.OK);
         }

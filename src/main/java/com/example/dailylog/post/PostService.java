@@ -3,12 +3,12 @@ package com.example.dailylog.post;
 import java.util.List;
 
 public interface PostService {
-    List<Post> findAll();
-    void createPost(Post post);
+    List<Post> getAllPosts(Long boardId);
+    boolean  createPost(Long boardId, Post post);
 
-    Post getPostByID(Long id);
+    Post getPostById(Long boardId, Long postId);
 
-    boolean deletePostById(Long id);
+    boolean deletePostById(Long boardId, Long postId);
 
-    boolean updatePost(Long id, Post updatedPost);
+    boolean updatePost(Long boardId, Long postId, Post updatedPost);
 }

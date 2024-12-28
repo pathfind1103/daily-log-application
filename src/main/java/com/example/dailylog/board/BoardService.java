@@ -6,7 +6,7 @@ public interface BoardService {
     List<Board> getAllBoards();
     void createBoard(Board board);
 
-    Board getBoardByID(Long id);
+    Board getBoardById(Long id);
 
     boolean deleteBoardById(Long id);
 

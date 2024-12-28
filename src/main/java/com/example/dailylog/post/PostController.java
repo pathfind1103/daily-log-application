@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("boards/{boardId}")
 public class PostController {
     private PostService postService;
 
@@ -14,43 +14,48 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Post>> findAll() {
-       return ResponseEntity.ok(postService.findAll());
+    @GetMapping("/posts")
+    public ResponseEntity<List<Post>> getAllPosts(@PathVariable Long boardId) {
+       return ResponseEntity.ok(postService.getAllPosts(boardId));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
-        Post post = postService.getPostByID(id);
-        if (post != null) {
-            return new ResponseEntity<>(post, HttpStatus.OK);
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<Post> getPostById(@PathVariable Long boardId,
+                                            @PathVariable Long postId) {
+        return new ResponseEntity<>(postService.getPostById(boardId,postId), HttpStatus.OK);
+    }
+
+    @PostMapping("/posts")
+    public ResponseEntity<String> createPost(@PathVariable Long boardId,
+                                             @RequestBody Post post) {
+        boolean isPostCreated = postService.createPost(boardId, post);
+        if (isPostCreated) {
+            return new ResponseEntity<>("Post created successfully", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Post not created", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
-    @PostMapping
-    public ResponseEntity<String> createPost(@RequestBody Post post) {
-        postService.createPost(post);
-        return new ResponseEntity<>("Post created successfully", HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
-        boolean deleted = postService.deletePostById(id);
-        if (deleted) {
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable Long boardId,
+                                             @PathVariable Long postId) {
+        boolean isPostDeleted = postService.deletePostById(boardId,postId);
+        if (isPostDeleted) {
             return new ResponseEntity<>("Post deleted successfully", HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Post not deleted", HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updatePost(@PathVariable Long id,
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<String> updatePost(@PathVariable Long boardId,
+                                             @PathVariable Long postId,
                                              @RequestBody Post updatedPost) {
-        boolean updated = postService.updatePost(id, updatedPost);
+        boolean updated = postService.updatePost(boardId, postId, updatedPost);
         if (updated) {
             return new ResponseEntity<>("Post updated successfully", HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Post not updated", HttpStatus.NOT_FOUND);
     }
 }
 

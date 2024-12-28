@@ -2,6 +2,7 @@ package com.example.dailylog.post;
 
 import com.example.dailylog.board.Board;
 import com.example.dailylog.tag.Tag;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -16,8 +17,9 @@ public class Post {
     private String content;
     private Date createdAt;
     private Date updatedAt;
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "board_id")
+//    @JoinColumn(name = "board_id")
     private Board board;
 
     public Post() {
